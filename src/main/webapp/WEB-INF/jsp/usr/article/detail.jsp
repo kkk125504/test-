@@ -6,6 +6,7 @@
 	<script>
 		const params = {};
 		params.id = parseInt('${param.id}');
+		params.resultTypeCode = 'article';
 	</script>
 	
 	<script>
@@ -55,36 +56,90 @@
 	}
 		
 	//댓글리스트 출력
-	function replyList() {		
-		$.get('../reply/getReplies', {
-			relId : params.id,
-			relTypeCode : 'article',
-			ajaxMode : 'Y'
-		}, function(data) {
-			var replyContent = "";
-			if(data.data1.length < 1){
-				replyContent += "댓글이 존재 하지 않습니다.";
-			}
-			$(data.data1).each(function(){
-				var loginedMemberId = ${rq.loginedMemberId};
-				var replyMemberId= this.memberId;
-				replyContent += '<div class= "reply'+ this.id+'">'
-				replyContent += '<div><span>';
-				replyContent += this.extra__writerName +'</span></div>';
-				replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';				
-				replyContent += this.body+'</span></div>';			
-			
- 				if(loginedMemberId == replyMemberId){
- 					replyContent +='<button class="btn" onclick="replaceModifyForm('+this.id +','+this.extra__writerName+','+this.body+')">수정</button>';
- 					replyContent +='<button class="btn">삭제</button>';
-				}
- 				replyContent += '</div>';
- 				replyContent += '</div>';
- 				replyContent += '<div class="divider"></div>';
-			});
-			$('.replyList').html(replyContent);
-		}, 'json');			
-	}	
+// 	function replyList() {		
+// 		$.get('../reply/getReplies', {
+// 			relId : params.id,
+// 			relTypeCode : 'article',
+// 			ajaxMode : 'Y'
+// 		}, function(data) {
+// 			var replyContent = "";
+// 			if(data.data1.length < 1){
+// 				replyContent += "댓글이 존재 하지 않습니다.";
+// 			}
+// 			$(data.data1).each(function(){
+// 				var loginedMemberId = ${rq.loginedMemberId};
+// 				var replyMemberId= this.memberId;				
+//  				replyContent += '<div class="divider"></div>';
+// 				replyContent += '<div class= "reply'+ this.id+'">'
+// 				replyContent += '<div><span>';
+// 				replyContent += this.extra__writerName +'</span></div>';
+// 				replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';				
+// 				replyContent += this.body+'</span></div>';							
+//  				if(loginedMemberId == replyMemberId){
+//  					replyContent +='<button class="btn" onclick="Reply__ModifyForm('+this.id +','+this.extra__writerName+','+this.body+')">수정</button>';
+//  					replyContent +='<button class="btn" onclick="Reply__Delete('+ this.id +')">삭제</button>';
+// 				}
+//  				replyContent += '</div>';
+//  				replyContent += '</div>';
+ 				
+//  				$.get('../reply/getReplies', {
+//  					relId : this.id,
+//  					relTypeCode : 'reply',
+//  					ajaxMode : 'Y'
+//  				}, function(data) {
+//  					replyContent += '<div>연결성공</div>';
+//  				},'json');
+ 				
+// 			});
+// 			$('.replyList').html(replyContent);
+// 		}, 'json');			
+// 	}	
+	//
+	function replyList() {	
+	      $.ajax({
+	        type: "GET",
+	        url: "../reply/getReplies",
+	        dataType: "json",
+	    	async : false,
+	    	data : {"relId" : params.id, "relTypeCode" : "article"},
+	        error: function() {
+	          console.log('통신실패!!');
+	        },
+	        success: function(data) {
+	        	var replyContent = "";
+	 			if(data.data1.length < 1){
+	 				replyContent += "댓글이 존재 하지 않습니다.";
+	 			}
+	 			$(data.data1).each(function(){
+	 				var loginedMemberId = ${rq.loginedMemberId};
+	 				var replyMemberId= this.memberId;				
+	  				replyContent += '<div class="divider"></div>';
+	 				replyContent += '<div class= "reply'+ this.id+'">'
+	 				replyContent += '<div><span>';
+	 				replyContent += this.extra__writerName +'</span></div>';
+	 				replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';				
+	 				replyContent += this.body+'</span></div>';							
+	  				if(loginedMemberId == replyMemberId){
+	  					replyContent +='<button class="btn btn-outline btn-xs" onclick="Reply__ModifyForm('+this.id +','+this.extra__writerName+','+this.body+')">수정</button>';
+	  					replyContent +='<button class="btn btn-outline btn-xs" onclick="Reply__Delete('+ this.id +')">삭제</button>';
+	 				}
+	  				replyContent += '</div>';
+	  				
+	  				$.get('../reply/getReplies', {
+ 					relId : this.id,
+ 					relTypeCode : 'reply',
+ 					ajaxMode : 'Y'
+ 					}, function(data) {
+ 						replyContent += '<div>연결성공</div>';
+						console.log('실행!!');
+ 					},'json');	        
+	      });
+	 			$('.replyList').html(replyContent); 
+	 			console.log(replyContent);
+		}	        
+	   })
+	}
+//	
 	
 	function Reply__Write() {				
 		$.get('../reply/doWrite', {
@@ -100,30 +155,24 @@
 		}, 'json');	
 	}	
 	
-	function replyModifyForm(replyId,writerName,body) {		
+	function Reply__ModifyForm(replyId,writerName,body) {		
 		
 		var	replyReplaceContent= "<div>gggggggggggggggg</div>";
-// 		replyReplaceContent += '<div><span>';
-// 		replyReplaceContent += writerName +'</span></div>';
-// 		replyReplaceContent += '<div class="bg-base-300 rounded-box "><input class="mx-8">';				
-// 		replyReplaceContent += body+'</input></div>';	
-			
-// 		replyReplaceContent += '<td>'+replyId+'</td>';
-// 		replyReplaceContent += '<td>날짜</td>';
-// 		replyReplaceContent += '<td>'+replyWriterName+'</td>';				
-// 		replyReplaceContent += '<td>1</td>';			
-//  		replyReplaceContent += '<td>';		
-//  		replyReplaceContent += '<form>';
-//  		replyReplaceContent += '<inpunt type="hidden" name="replyId" value="'+replyId+'"/>';
-//  		replyReplaceContent += '<input class="modify w-full input input-bordered input-lg" name="body" placeholder="입력!!!!" value='+replyBody+' />';
-//  		replyReplaceContent += '<button type="button" onclick="Reply__modify()">수정</button>';
-//  		replyReplaceContent += '<button type="button">삭제</button>';
-//  		replyReplaceContent += '</form>';
-//  		replyReplaceContent += '</td>';			
-//  		replyReplaceContent += '</tr>';			
+		
 		$('.reply'+replyId).replaceWith(replyReplaceContent);
-// 		$('.modify').focus();
 	}
+	function Reply__Delete(replyId) {				
+		$.get('../reply/doDelete', {
+			id : replyId
+		}, function(data) {
+			if(data.fail){
+				alert(data.data.msg);
+				return;
+			}
+			replyList();
+		}, 'json');	
+	}	
+
 	</script>
 	
 	<section class="mt-8 text-xl">
@@ -250,7 +299,7 @@
 				</form>
 			</c:if>
 			<c:if test="${rq.notLogined}">
-				<a class="btn-text-link btn btn-active btn-ghost" href="/usr/member/login">로그인</a> 후 이용해주세요
+				<a class="btn-text-link btn btn-active btn-ghost" href="${rq.loginUri}">로그인</a> 후 이용해주세요
 			</c:if>
 		</div>
 	</section>
