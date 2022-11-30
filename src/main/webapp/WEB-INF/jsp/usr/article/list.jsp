@@ -71,11 +71,27 @@
 									<td>${article.id } </td>
 									<td>${article.forPrintType1RegDate}</td>
 									<td>
-										<a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">${article.title}
-										<c:if test="${article.extra__replyCount > 0}">
-											&nbsp;&nbsp;<span class="text-red-500">[${article.extra__replyCount}]</span>
-										</c:if>
-										</a>
+									<c:choose>
+										<c:when test="${article.secret}">											
+											<c:if test="${article.memberId == rq.loginedMemberId}">
+												<a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}"><span class="text-gray-500">🔒︎&nbsp;비밀글 입니다.</span>
+													<c:if test="${article.extra__replyCount > 0}">
+														&nbsp;&nbsp;<span class="text-red-500">[${article.extra__replyCount}]</span>
+													</c:if>
+												</a>
+											</c:if> 
+											<c:if test="${article.memberId != rq.loginedMemberId }">
+												<span class="text-gray-500">🔒︎&nbsp;비밀글 입니다.</span>	
+											</c:if>
+										</c:when>
+										<c:otherwise>
+											<a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">${article.title}
+												<c:if test="${article.extra__replyCount > 0}">
+													&nbsp;&nbsp;<span class="text-red-500">[${article.extra__replyCount}]</span>
+												</c:if>
+											</a>
+										</c:otherwise> 		
+									</c:choose>																																																	
 									</td>
 									<td>${article.extra__writer}</td>
 									<td>${article.hitCount}</td>

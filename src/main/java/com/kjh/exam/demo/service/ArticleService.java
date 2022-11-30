@@ -48,8 +48,8 @@ public class ArticleService {
 		article.setExtra__actorCanModify(actorCanModify.isSuccess());
 	}
 
-	public ResultData<Integer> writeArticle(int loginedMemberId, String title, String body, int boardId) {
-		articleRepository.writeArticle(loginedMemberId, title, body, boardId);
+	public ResultData<Integer> writeArticle(int loginedMemberId, String title, String body, int boardId, boolean secret) {
+		articleRepository.writeArticle(loginedMemberId, title, body, boardId, secret);
 		int id = articleRepository.getLastInsertId();
 
 		return ResultData.from("S-1", Ut.f("%d번 게시물이 생성되었습니다.", id), "id", id);
@@ -59,9 +59,9 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 
-	public ResultData<Article> modifyArticle(int id, String title, String body) {
+	public ResultData<Article> modifyArticle(int id, String title, String body, boolean secret) {
 
-		articleRepository.modifyArticle(id, title, body);
+		articleRepository.modifyArticle(id, title, body, secret);
 		Article article = getForPrintArticle(0, id);
 		return ResultData.from("S-1", Ut.f("%d번 게시물 수정 했습니다.", id), "article", article);
 	}

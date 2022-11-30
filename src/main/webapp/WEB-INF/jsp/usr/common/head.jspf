@@ -180,7 +180,8 @@ background: #202020;
 						<span>LOGOUT</span>
 					</a>						
 				</c:if>									
-			</div>																		
+			</div>
+																				
 		</header>		
 		<main>
 		<div class="height"></div>

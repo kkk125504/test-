@@ -39,6 +39,12 @@ public class UsrArticleController {
 			
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
+		if(article.isSecret()) {
+			if(rq.getLoginedMemberId() != article.getMemberId()) {
+				return rq.jsHistoryBackOnView("🔒︎ 비밀글입니다.");
+			}
+		}
+		
 		ResultData actorCanMakeReactionRd = reactionPointService.actorCanMakeReaction(rq.getLoginedMemberId(),"article", id);
 
 		model.addAttribute("article", article);
@@ -97,7 +103,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(String title, String body, int boardId) {
+	public String doWrite(String title, String body, int boardId, boolean secret) {
 
 		if (Ut.empty(title)) {
 			return rq.jsHistoryBack("제목을 입력해 주세요.");
@@ -105,7 +111,7 @@ public class UsrArticleController {
 		if (Ut.empty(body)) {
 			return rq.jsHistoryBack("내용을 입력해 주세요.");
 		}
-		ResultData<Integer> writeRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId);
+		ResultData<Integer> writeRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId, secret);
 
 		int id = (int) writeRd.getData1();
 
@@ -133,7 +139,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
+	public String doModify(int id, String title, String body, boolean secret) {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
@@ -146,7 +152,7 @@ public class UsrArticleController {
 			return rq.jsHistoryBack(actorCanModifyRd.getMsg());
 		}
 
-		articleService.modifyArticle(id, title, body);
+		articleService.modifyArticle(id, title, body, secret);
 		return rq.jsReplace(Ut.f("%d번 게시물 수정", id), Ut.f("../article/detail?id=%d", id));
 	}
 

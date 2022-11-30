@@ -37,7 +37,7 @@ function ArticleWrite__submit(form){
 						<col width="200" />
 					</colgroup>	
 					<tbody>														
-						<tr>
+						<tr>								
 							<td>게시판 선택</td>
 							<td>
 								<select name="boardId" class="select select-bordered">									
@@ -45,11 +45,15 @@ function ArticleWrite__submit(form){
 									<option value="2">좋은글 / 좋은 글귀</option>
 									<option value="3">자유</option>
 								</select>
+								<input type="checkbox" name="secret">
+	  							<span>비밀글 설정</span>
 							</td>
 						</tr>
 						<tr>
 							<td>제목</td>
-							<td><input required="required" type="text" class="w-4/6 input input-bordered input-lg" name="title" value="${article.title }" placeholder="제목을 입력해주세요." /></td>						
+							<td>								
+								<input required="required" type="text" class="w-4/6 input input-bordered input-lg" name="title" value="${article.title }" placeholder="제목을 입력해주세요." />
+							</td>						
 						</tr>
 						<tr>
 							<td>내용</td>

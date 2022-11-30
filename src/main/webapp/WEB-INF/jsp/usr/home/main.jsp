@@ -230,7 +230,7 @@ background: #D9D9D9;
 </section>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services,clusterer,drawing"></script>
 <script>
 	// 마커를 담을 배열입니다
 	var markers = [];

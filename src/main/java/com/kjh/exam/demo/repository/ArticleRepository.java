@@ -13,7 +13,7 @@ import com.kjh.exam.demo.vo.Article;
 @Mapper
 public interface ArticleRepository {
 
-	public void writeArticle(int loginedMemberId, String title, String body, int boardId);
+	public void writeArticle(int loginedMemberId, String title, String body, int boardId, boolean secret);
 
 	public Article getForPrintArticle(int id);
 
@@ -21,7 +21,7 @@ public interface ArticleRepository {
 
 	public void deleteArticle(int id);
 
-	public void modifyArticle(int id, String title, String body);
+	public void modifyArticle(int id, String title, String body, boolean secret);
 
 	public int getLastInsertId();
 

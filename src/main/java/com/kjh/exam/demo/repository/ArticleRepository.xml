@@ -10,7 +10,8 @@
 		memberId = #{loginedMemberId},
 		title = #{title},
 		`body`= #{body},
-		boardId = #{boardId}
+		boardId = #{boardId},
+		secret = #{secret}
 	</insert>
 
 	<select id="getForPrintArticle" resultType="Article">
@@ -68,7 +69,8 @@
 		<set>
 		updateDate = NOW(),
 		<if test="title != null">title = #{title},</if>
-		<if test="body != null">`body`= #{body}</if>
+		<if test="body != null">`body`= #{body},</if>
+		secret = #{secret}
 		</set>		
 		WHERE id = #{id}
 	</update>
