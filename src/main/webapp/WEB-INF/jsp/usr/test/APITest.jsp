@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:set var="pageTitle" value="MAIN" />
+<c:set var="pageTitle" value="REPLY MODIFY" />
 <%@ include file="../common/head.jspf" %>
 <style>
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative; width:100%; height:500px;}
+.map_wrap {position:relative;width:100%;height:500px;}
 #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
@@ -40,178 +40,12 @@
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
 
-</style>
-<style>
-.main-box1{
-position: absolute;
-width: 1760px;
-height: 521px;
-left: 80px;
-top: 214px;
-
-background: #FFFAF3;
-}
-
-.main-box2{ 
-position: absolute;
-width: 1760px;
-height: 516px;
-left: 80px;
-top: 881px;
-
-background: #FFFAF3;
- } 
-
-.main-box1-title{
-position: absolute;
-width: 368px;
-height: 67px;
-left: 194px;
-top: 310px;
-
-font-weight: 300;
-font-size: 48px;
-line-height: 65px;
-text-align: center;
-letter-spacing: 0.06em;
-
-color: #000000;
-}
-
-.main-box2-title{
-position: absolute;
-width: 368px;
-height: 67px;
-left: 388px;
-top: 901px;
-
-font-weight: 300;
-font-size: 30px;
-line-height: 65px;
-text-align: center;
-letter-spacing: 0.06em;
-
-color: #000000;
-}
-
-.main-box2-title2{
-position: absolute;
-width: 368px;
-height: 67px;
-left: 1164px;
-top: 901px;
-
-font-weight: 300;
-font-size: 30px;
-line-height: 65px;
-text-align: center;
-letter-spacing: 0.06em;
-
-color: #000000;
-}
-
-.main-box1-text{
-position: absolute;
-width: 388px;
-height: 136px;
-left: 194px;
-top: 468px;
-
-font-weight: 700;
-font-size: 18px;
-line-height: 147.6%;
-
-letter-spacing: 0.06em;
-
-color: #000000;
-}
-.brush{
-position: absolute;
-width: 1760px;
-height: 147px;
-left: 80px;
-top: 640px;
-background: rgba(192, 141, 93, 0.2);
-filter: blur(50px);
-}
-
-.brush2{
-position: absolute;
-width: 1760px;
-height: 233.66px;
-left: 80px;
-top: 1298px;
-
-background: rgba(192, 141, 93, 0.2);
-filter: blur(50px);
-}
-
-.main-box1-image{
-position: absolute;
-width: 911px;
-height: 415px;
-left: 872px;
-top: 267px;
-background-image: url("명상사진.jpg");
-}
-
-.main-box2-content1{
-position: absolute;
-width: 756px;
-height: 351px;
-left: 194px;
-top: 990px;
-
-background: #D9D9D9;
-}
-
-.vector1{
-
-position: absolute;
-width: 368px;
-height: 17.48px;
-left: 194px;
-top: 432px;
-
-border: 3px solid #3F4042;
-}
-.map-box{
-position: absolute;
-width: 756px;
-height: 351px;
-left: 970px;
-top: 990px;
-background: #D9D9D9;
-}
-
-</style>
+</style>	
 <section>
-	<div class="main-box1"></div>
-	<div class="main-box1-title">
-		<span>메인타이틀</span>
-	</div>
-	<div class="vector1">~~~~</div>
-	<div class="main-box1-text">
-		<span>
-			메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글
-		</span>
-	</div>
-	<div class="main-box1-image">
-		<img src="https://cdn.pixabay.com/photo/2020/03/29/18/33/girl-4981766_960_720.jpg" width="600">
-	</div>
-	<div class="brush">	</div>
-</section>
-<section>	
-	<div class="main-box2"></div>
-	<div class="main-box2-title">명상 영상</div>
-	<div class="main-box2-content1">
-		<iframe width="756" height="351" src="https://www.youtube.com/embed/dZewQEbQQM0" 
-		title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-		</iframe>
-	</div>
-	<div class="main-box2-title2">명상장소 검색하기</div>
-	<div class="map_wrap map-box">
-		<div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>	
+	<div class="container mx-auto">
+		<div class="map_wrap">
+	    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+	
 	    <div id="menu_wrap" class="bg_white">
 	        <div class="option">
 	            <div>
@@ -225,13 +59,11 @@ background: #D9D9D9;
 	        <ul id="placesList"></ul>
 	        <div id="pagination"></div>
 	    </div>
-	</div>		
-	<div class="brush2"></div>
-</section>
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
-<script>
+		</div>	
+	</div>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
+	<script>
 	// 마커를 담을 배열입니다
 	var markers = [];
 
@@ -447,6 +279,10 @@ background: #D9D9D9;
 	    while (el.hasChildNodes()) {
 	        el.removeChild (el.lastChild);
 	    }
-	}		
-</script>
+	}
+	
+	
+	</script>
+</section>
+	
 <%@ include file="../common/foot.jspf" %>

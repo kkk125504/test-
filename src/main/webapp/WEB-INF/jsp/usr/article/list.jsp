@@ -7,12 +7,10 @@
 			<div class="flex">
 				<div>
 					총 게시물 갯수 : <span class="badge">${articlesCount }&nbsp;개</span>
-				</div>
-				<div><a class="ml-2 btn btn-ghost" href="../article/write">글쓰기</a></div>
-				<div class="flex-grow"></div>				
+				</div>				
+				<div class="flex-grow"></div>												
 				<form class="flex">
-					<input type="hidden" name="boardId" value="${board.id}" />
-
+					<input type="hidden" name="boardId" value="${board.id}" />					
 					<select data-value="${param.searchKeywordType}" name="searchKeywordType" class="select select-bordered">
 						<option value="title">제목</option>
 						<option value="body">내용</option>
@@ -22,7 +20,13 @@
 					<input name="searchKeyword" type="text" class="ml-2 w-96 input input-bordered" placeholder="검색어를 입력해주세요."
 					maxlength="20" value="${param.searchKeyword }"/>
 					
-					<button type="submit" class="ml-2 btn btn-ghost">SEARCH</button>
+					<button type="submit" class="mx-2 btn btn-ghost">SEARCH</button>
+					
+					<select name="itemsInAPage" class="select select-bordered">						
+						<option value="10" ${param.itemsInAPage == 10 ? 'selected' : ''}>10개씩</option>
+						<option value="20" ${param.itemsInAPage == 20 ? 'selected' : ''}>20개씩</option>
+					</select>	
+					<button type="submit" class="mx-2 btn btn-ghost">보기</button>	
 				</form>
 			</div>
 			<div class="table-box-type-1 mt-2">				
@@ -35,7 +39,7 @@
 				<col width ="100"/>
 				<col width ="100"/>
 				</colgroup>
-						<thead class="bg-gray-200">
+						<thead>
 							<tr>
 								<th>번호</th>
 								<th>날짜</th>
@@ -46,12 +50,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:if test="${board.id ==1 }">
+							<c:if test="${board.id == 1 }">
 								<c:forEach var="article" items="${bestArticles}">
-									<tr class="bg-red-300">
-										<td></td>
+									<tr class="bg-red-50 text-red-500">
+										<td><div class="badge badge-secondary">추천</div></td>
 										<td>${article.forPrintType1RegDate}</td>
-										<td><a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">${article.title}</a></td>
+										<td>
+											<a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">
+												${article.title}&nbsp;&nbsp;<span class="text-red-500">[${article.extra__replyCount}]</span>												
+											</a>
+										</td>
 										<td>${article.extra__writer}</td>
 										<td>${article.hitCount}</td>
 										<td>${article.goodReactionPoint}</td>
@@ -62,7 +70,13 @@
 								<tr>
 									<td>${article.id } </td>
 									<td>${article.forPrintType1RegDate}</td>
-									<td><a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">${article.title}</a></td>
+									<td>
+										<a class="hover:underline block w-full truncate" href="${rq.getArticleDetailUriFromArticleList(article)}">${article.title}
+										<c:if test="${article.extra__replyCount > 0}">
+											&nbsp;&nbsp;<span class="text-red-500">[${article.extra__replyCount}]</span>
+										</c:if>
+										</a>
+									</td>
 									<td>${article.extra__writer}</td>
 									<td>${article.hitCount}</td>
 									<td>${article.goodReactionPoint}</td>
@@ -78,7 +92,7 @@
 				<c:set var="pageBaseUri" value="?boardId=${board.id}"/>
 				<c:set var="pageBaseUri" value="${pageBaseUri }&searchKeywordType=${param.searchKeywordType}"/>
 				<c:set var="pageBaseUri" value="${pageBaseUri}&searchKeyword=${param.searchKeyword}"/>
-
+				<c:set var="pageBaseUri" value="${pageBaseUri}&itemsInAPage=${param.itemsInAPage}"/>
 				<div class="btn-group">
 					<c:if test="${startPage>1 }">
 						<a class="btn btn-md" href="${pageBaseUri }&page=1">1</a>
@@ -95,7 +109,8 @@
 					<c:if test="${endPage < pagesCount }">
 						<a class="btn btn-md" href="${pageBaseUri }&page=${pagesCount }">${pagesCount }</a>
 					</c:if>
-				</div>									
+				</div>
+				<div><a class="ml-2 btn btn-ghost btn-active mx-1" href="../article/write">글쓰기</a></div>								
 			</div>
 		</div>
 	</section>

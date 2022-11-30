@@ -23,10 +23,14 @@
 	</select>
 
 	<select id="getForPrintArticles" resultType="Article">
-		SELECT A.*, M.nickname AS extra__writer 
+		SELECT A.*, M.nickname AS extra__writer,
+		COUNT(RP.id) AS extra__replyCount
 		FROM article AS A
 		INNER JOIN `member` AS M
 		ON A.memberId = M.id
+		LEFT JOIN reply AS RP
+		ON A.id = RP.relId
+		AND RP.relTypeCode = 'article'
 		WHERE 1
 		<if test="boardId != 0">
 		AND boardId = #{boardId}
@@ -34,19 +38,20 @@
 		<if test="searchKeyword !=''">
 			<choose>
 				<when test="searchKeywordType=='title'">
-				AND title LIKE CONCAT('%',#{searchKeyword},'%')
+				AND A.title LIKE CONCAT('%',#{searchKeyword},'%')
 				</when>
 		    	<when test="searchKeywordType=='body'">
-		    	AND body LIKE CONCAT('%',#{searchKeyword},'%')
+		    	AND A.body LIKE CONCAT('%',#{searchKeyword},'%')
 		    	</when>
 		    	<otherwise>
 		    	AND (
-		    		title LIKE CONCAT('%',#{searchKeyword},'%') OR
-		    		body LIKE CONCAT('%',#{searchKeyword},'%')
+		    		A.title LIKE CONCAT('%',#{searchKeyword},'%') OR
+		    		A.body LIKE CONCAT('%',#{searchKeyword},'%')
 		    	)
 		    	</otherwise>  	
 			</choose>
-		</if>				
+		</if>
+		GROUP BY A.id						
 		ORDER BY A.id DESC
 		<if test="limitTake != -1">
 		LIMIT #{limitStart}, #{limitTake}

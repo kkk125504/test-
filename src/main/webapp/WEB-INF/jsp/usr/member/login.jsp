@@ -13,11 +13,11 @@
 				</colgroup>					
 						<tbody>						
 								<tr>
-									<td>아이디 </td>
+									<th>아이디 </th>
 									<td><input type="text" name="loginId" autocomplete="off" placeholder="아이디를 입력해주세요." /></td>
 								</tr>
 								<tr>
-									<td>비밀번호 </td>
+									<th>비밀번호 </th>
 									<td><input type="text" name="loginPw" autocomplete="off" placeholder="비밀번호를 입력해주세요." /></td>
 								</tr>						
 						</tbody>

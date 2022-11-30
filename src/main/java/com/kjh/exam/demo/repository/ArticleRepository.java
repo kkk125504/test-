@@ -63,11 +63,17 @@ public interface ArticleRepository {
 	
 
 	@Select("""
-			SELECT A.* FROM article AS A
+			SELECT A.*, M.nickname AS extra__writer
+			, COUNT(RP.id) AS extra__replyCount
+			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id 
+			INNER JOIN reply AS RP
+			ON A.id = RP.relId
+			AND RP.relTypeCode = 'article'
 			WHERE A.boardId = #{boardId}
-			AND A.goodReactionPoint > 0
+			AND A.goodReactionPoint > 0	
+			GROUP BY A.id		
 			ORDER BY A.goodReactionPoint DESC
 			LIMIT 0,3
 			""")

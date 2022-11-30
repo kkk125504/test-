@@ -63,21 +63,20 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
 			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int itemsInAPage,
 			@RequestParam(defaultValue = "title,body") String searchKeywordType,
 			@RequestParam(defaultValue = "") String searchKeyword) {
 		Board board = boardService.getBoardById(boardId);
 
 		if (board == null) {
 			return rq.jsHistoryBackOnView("존재하지 않는 게시판 입니다.");
-		}
-				
-		int itemsInAPage = 10;
+		}				
 
 		List<Article> articles = articleService.getForPrintArticles(rq.getLoginedMemberId(), boardId, page,
 				itemsInAPage, searchKeywordType, searchKeyword);
 		
 		List<Article> bestArticles = articleService.getForPrintBestArticles(boardId);
-		if(bestArticles.isEmpty()==false) {
+		if(bestArticles.isEmpty() == false) {
 			model.addAttribute("bestArticles", bestArticles);
 		}
 		

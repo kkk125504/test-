@@ -1,11 +1,11 @@
 @font-face {
-    font-family: 'LeferiPoint-WhiteObliqueA';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-WhiteObliqueA.woff') format('woff');
-    font-weight: normal;
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
     font-style: normal;
 }
 html>body, html>body .toast-ui-editor, html>body .toastui-editor-contents, html>body .ProseMirror, html>body .toastui-editor-md-mode {
-	font-family: 'LeferiPoint-WhiteObliqueA', sans-serif;
+	font-family: 'Pretendard-Regular';
 	text-underline-position: under;
 }
 
@@ -13,23 +13,35 @@ html>body, html>body .toast-ui-editor, html>body .toastui-editor-contents, html>
 .table-box-type-1 > table {
 	width:100%;
 }
+
 .table-box-type-1 > .min {
 	width:50%;
 }
+
 .btns-box-type-1{
 	width:50%;
 	margin-left : auto;
 	margin-right : auto;
 }
-.table-box-type-1 > table th ,.table-box-type-1 > table td {
-	border : 1px solid black;
+.table-box-type-1 > table th{
+	background-color: #FFFAF3;
+}
+.table-box-type-1 > table th , .table-box-type-1 > table td {
+	border-top : 1px solid black;
+	border-bottom : 1px solid black;
 	padding : 10px;
 	text-align: center;
-} 
+	border-color: grey;
+}
+
+.table-box-type-1 > table tr:hover{
+	background-color: #FFFAF3;
+}
 
 .btn-text-link{
 	color: grey;
 }
+
 .btn-text-link:hover{
 	color: black;
 	text-decoration: underline;

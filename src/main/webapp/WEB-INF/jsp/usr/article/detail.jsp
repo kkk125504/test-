@@ -184,19 +184,19 @@
 					</colgroup>	
 					<tbody>		
 						<tr>
-							<td class="bg-gray-200">번호</td><td><span class="badge">${article.id }</span></td>						
+							<th class="bg-gray-200">번호</th><td><span class="badge">${article.id }</span></td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">작성날짜</td><td>${article.regDate }</td>						
+							<th class="bg-gray-200">작성날짜</th><td>${article.regDate }</td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">수정날짜</td><td>${article.updateDate }</td>						
+							<th class="bg-gray-200">수정날짜</th><td>${article.updateDate }</td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">제목</td><td>${article.title }</td>						
+							<th class="bg-gray-200">제목</th><td>${article.title }</td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">내용</td>
+							<th class="bg-gray-200">내용</th>
 							<td>
 								<div class="toast-ui-viewer">
 									<script type="text/x-template">${article.body}</script>
@@ -204,16 +204,16 @@
 							</td>					
 						</tr>
 						<tr>
-							<td class="bg-gray-200">작성자</td><td>${article.extra__writer }</td>						
+							<th class="bg-gray-200">작성자</th><td>${article.extra__writer }</td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">조회수</td>
+							<th class="bg-gray-200">조회수</th>
 							<td>
 							<span class="badge article-detail__hit-count">${article.hitCount }</span>							   
 							</td>						
 						</tr>
 						<tr>
-							<td class="bg-gray-200">추천 수</td>
+							<th class="bg-gray-200">추천 수</th>
 							<td>
 							<span class="btn btn-active btn-sm">${article.goodReactionPoint }</span>
 							<c:if test="${actorCanMakeReaction}">
@@ -268,11 +268,10 @@
 		<div class="container mx-auto px-3">
 			<h2>댓글 작성</h2>
 			<c:if test="${rq.logined }">
-<!-- 			onsubmit="ReplyWrite__submitForm(this); return false;" -->
-				<form class="table-box-type-1"  >
+				<form class="table-box-type-1" >
 					<input type="hidden" name="relTypeCode" value="article" />
 					<input type="hidden" name="relId" value="${param.id}" />
-					<table class="table table-zebra w-full">
+					<table class="table w-full">
 						<colgroup>
 							<col width="200" />
 						</colgroup>	
