@@ -34,6 +34,7 @@
 			// 연습코드
 			setTimeout(ArticleDetail__increaseHitCount, 2000);
 			replyList();
+			ReOfRe__list();
 		})
 	</script>
 	<script>
@@ -55,48 +56,12 @@
 		form.submit();		
 	}
 		
-	//댓글리스트 출력
-// 	function replyList() {		
-// 		$.get('../reply/getReplies', {
-// 			relId : params.id,
-// 			relTypeCode : 'article',
-// 			ajaxMode : 'Y'
-// 		}, function(data) {
-// 			var replyContent = "";
-// 			if(data.data1.length < 1){
-// 				replyContent += "댓글이 존재 하지 않습니다.";
-// 			}
-// 			$(data.data1).each(function(){
-// 				var loginedMemberId = ${rq.loginedMemberId};
-// 				var replyMemberId= this.memberId;				
-//  				replyContent += '<div class="divider"></div>';
-// 				replyContent += '<div class= "reply'+ this.id+'">'
-// 				replyContent += '<div><span>';
-// 				replyContent += this.extra__writerName +'</span></div>';
-// 				replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';				
-// 				replyContent += this.body+'</span></div>';							
-//  				if(loginedMemberId == replyMemberId){
-//  					replyContent +='<button class="btn" onclick="Reply__ModifyForm('+this.id +','+this.extra__writerName+','+this.body+')">수정</button>';
-//  					replyContent +='<button class="btn" onclick="Reply__Delete('+ this.id +')">삭제</button>';
-// 				}
-//  				replyContent += '</div>';
-//  				replyContent += '</div>';
- 				
-//  				$.get('../reply/getReplies', {
-//  					relId : this.id,
-//  					relTypeCode : 'reply',
-//  					ajaxMode : 'Y'
-//  				}, function(data) {
-//  					replyContent += '<div>연결성공</div>';
-//  				},'json');
- 				
-// 			});
-// 			$('.replyList').html(replyContent);
-// 		}, 'json');			
-// 	}	
-	//
-	function replyList() {	
-	      $.ajax({
+	//댓글리스트 출력	
+	var replyIds = [];
+	var index = 0;
+	function replyList() {
+ 	 var replyContent = "";
+	  $.ajax({
 	        type: "GET",
 	        url: "../reply/getReplies",
 	        dataType: "json",
@@ -106,41 +71,145 @@
 	          console.log('통신실패!!');
 	        },
 	        success: function(data) {
-	        	var replyContent = "";
-	 			if(data.data1.length < 1){
-	 				replyContent += "댓글이 존재 하지 않습니다.";
-	 			}
-	 			$(data.data1).each(function(){
-	 				var loginedMemberId = ${rq.loginedMemberId};
-	 				var replyMemberId= this.memberId;				
-	  				replyContent += '<div class="divider"></div>';
-	 				replyContent += '<div class= "reply'+ this.id+'">'
-	 				replyContent += '<div><span>';
-	 				replyContent += this.extra__writerName +'</span></div>';
-	 				replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';				
-	 				replyContent += this.body+'</span></div>';							
-	  				if(loginedMemberId == replyMemberId){
-	  					replyContent +='<button class="btn btn-outline btn-xs" onclick="Reply__ModifyForm('+this.id +','+this.extra__writerName+','+this.body+')">수정</button>';
-	  					replyContent +='<button class="btn btn-outline btn-xs" onclick="Reply__Delete('+ this.id +')">삭제</button>';
-	 				}
-	  				replyContent += '</div>';
-	  				
-	  				$.get('../reply/getReplies', {
- 					relId : this.id,
- 					relTypeCode : 'reply',
- 					ajaxMode : 'Y'
- 					}, function(data) {
- 						replyContent += '<div>연결성공</div>';
-						console.log('실행!!');
- 					},'json');	        
-	      });
-	 			$('.replyList').html(replyContent); 
-	 			console.log(replyContent);
-		}	        
-	   })
-	}
-//	
+			  if(data.data1.length < 1){
+			  replyContent += "";
+			  return;
+  			  }
+ 			 $(data.data1).each(function(){
+			  var loginedMemberId = ${rq.loginedMemberId};
+			  var replyMemberId= this.memberId;
+			  var replyId = JSON.stringify(this.id);
+			  var extra__writerName = JSON.stringify(this.extra__writerName);
+			  var body = JSON.stringify(this.body);
+			  replyIds[index] = this.id;
+  			  index++;
+			  replyContent += '<div class="divider"></div>';
+			  replyContent += '<div id = "reply'+ replyId +'">'
+			  replyContent += '<div><span>';
+			  replyContent += this.extra__writerName +'</span>';
+			  
+			  //댓글 삭제, 수정버튼
+			  if(loginedMemberId == replyMemberId){
+			  replyContent += '<button onclick="Reply__ModifyForm();">수정</button>';			   
+			  replyContent += '<button onclick="Reply__delete('+this.id+');">삭제</button>';
+			  }
+			  
+			  //답글 쓰기
+			  if(${rq.isLogined()}){
+			   replyContent += '<button class="ml-20" onclick="ReOfRe__WriteForm('+replyId+')">답글쓰기</button>';
+			  }
+			  replyContent += '</div>';
+			  replyContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';  
+			  replyContent += this.body+'</span></div>';  
+
+   			  replyContent += '</div>';
+			  replyContent += '<div id="ReOfRe__writeForm'+this.id+'"></div>';
+			  
+			   // 댓글의 댓글 리스트
+			   replyContent += '<div id= re'+this.id+'></div>';
+			  	});  
+			   $('.replyList').html(replyContent);
+				        }
+					  });    
+				}
 	
+		function ReOfRe__list(){
+		  if(replyIds.length > 0){
+		  for(let i  = 0; i < replyIds.length; i++){	
+		  var replyId = replyIds[i];
+		  var rorContent = "";
+	    	$.ajax({
+	          type: "GET",
+	          url: "../reply/getReplies",
+	          dataType: "json",
+	      	  async : false,
+	      	  data : { "relId" : replyId , "relTypeCode" : "reply"},
+	          error: function() {
+	            console.log('통신실패!!');
+	          },
+	          success: function(data) {
+	          	
+	          	if(data.data1 == null){
+	            return;
+	          	}
+          	//👉
+          	$(data.data1).each(function(){
+             
+            rorContent += '<div class="ml-12" id = "reply'+ this.id +'">'
+            rorContent += '<div><span>';
+            rorContent += this.extra__writerName +'</span></div>';          	
+            rorContent += '<div class="bg-base-300 rounded-box "><span class="mx-8">';  
+            rorContent += this.body+'</span></div>';
+            rorContent += '</div>';           
+            });
+            $('#re'+replyId).html(rorContent);   
+            }
+   			   });
+ 		  }
+	  }  
+	}
+  
+	function Reply__Write() {  
+	  $.get('../reply/doWrite', {
+	  relId : params.id,
+	  relTypeCode : $('input[name=relTypeCode]').val(),
+	  body : $('textarea[name=body]').val()
+	  }, function(data) {
+	  if(data.fail){
+	  alert(data.msg);
+	  }
+	  replyList();
+	  ReOfRe__list();
+	  }, 'json');	
+	}
+	
+	function ReOfRe__Write(replyId) {
+	  $.get('../reply/doWrite', {
+	  relId : replyId,
+	  relTypeCode : 'reply',
+	  body : $('input[name=ReOfRe'+replyId+']').val()
+	  }, function(data) {
+	  if(data.fail){
+	  alert(data.msg);
+	  }
+	  replyList();
+	  ReOfRe__list();
+	  }, 'json');	
+	}
+	
+	function ReOfRe__WriteForm(replyId) {
+  		var content = '<div>답글쓰기 : <input name="ReOfRe'+replyId+'" type="text" class="input input-bordered input-lg"/>';
+  		content += '<button type="button" class="mx-4" onclick="ReOfRe__Write('+replyId+')">작성</button>';
+  		content += '<button type="button" onclick="replyList(); ReOfRe__list();">취소</button></div>';
+  		$('#ReOfRe__writeForm'+replyId).html(content);
+	}
+  
+ 	function Reply__ModifyForm(replyId,writerName,body) {  
+   var	replyModifyContent= '<div>ddddd</div>';
+   $('.reply1').html(replyModifyContent);
+//    var	replyModifyContent= '';
+//    replyModifyContent += '<div><span>'; 
+//    replyModifyContent += writerName +'</span></div>';
+//    replyModifyContent += '<div class="bg-base-300 rounded-box ">';  
+//    replyModifyContent += '<input type="text" value="'+body+'"/></div>';  
+//    replyModifyContent +='<button class="btn">수정</button>';
+//    replyModifyContent +='<button class="btn">취소</button>';
+//    replyModifyContent += '</div>';
+//    $('.reply'+replyId).html(replyModifyContent);   
+ 	}
+	
+	//댓글 삭제
+	function Reply__delete(id) {
+	  $.get('../reply/doDelete', {
+	  id : id,
+	  ajaxMode : 'Y'
+	  }, function(data) {  
+	  replyList();
+	  ReOfRe__list();
+	  }, 'json');  
+	}
+	
+	//댓글 작성
 	function Reply__Write() {				
 		$.get('../reply/doWrite', {
 			relId : params.id,
@@ -154,24 +223,24 @@
 			replyList();
 		}, 'json');	
 	}	
-	
-	function Reply__ModifyForm(replyId,writerName,body) {		
+	// 댓글 수정 폼
+// 	function Reply__ModifyForm(replyId,writerName,body) {		
 		
-		var	replyReplaceContent= "<div>gggggggggggggggg</div>";
+// 		var	replyReplaceContent= "<div>gggggggggggggggg</div>";
 		
-		$('.reply'+replyId).replaceWith(replyReplaceContent);
-	}
-	function Reply__Delete(replyId) {				
-		$.get('../reply/doDelete', {
-			id : replyId
-		}, function(data) {
-			if(data.fail){
-				alert(data.data.msg);
-				return;
-			}
-			replyList();
-		}, 'json');	
-	}	
+// 		$('.reply'+replyId).replaceWith(replyReplaceContent);
+// 	}
+// 	function Reply__Delete(replyId) {				
+// 		$.get('../reply/doDelete', {
+// 			id : replyId
+// 		}, function(data) {
+// 			if(data.fail){
+// 				alert(data.data.msg);
+// 				return;
+// 			}
+// 			replyList();
+// 		}, 'json');	
+// 	}	
 
 	</script>
 	
