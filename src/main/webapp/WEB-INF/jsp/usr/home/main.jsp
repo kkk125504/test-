@@ -3,6 +3,7 @@
 <c:set var="pageTitle" value="MAIN" />
 <%@ include file="../common/head.jspf" %>
 <style>
+/* 카카오 지도 API */
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative; width:100%; height:500px;}
@@ -39,9 +40,56 @@
 #pagination {margin:10px auto;text-align: center;}
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
-
 </style>
 <style>
+/* 날씨 */
+.card{
+background: rgba(0, 0, 0, 0.884);
+color: white;
+padding: 1.5rem;
+border-radius: 30px;
+width: 100%;
+max-width: 420px;
+margin: 1rem;
+}
+.search{
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.search button{
+margin: 1rem;
+border-radius: 50%;
+border: none;
+height: 2.5rem;
+width: 2.5rem;
+outline: none;
+background-color: rgba(92, 88, 88, 0.644);
+color: white;
+}
+.search button:hover{
+background-color: rgb(92, 88, 88);
+cursor: pointer;
+transition: 0.2s ease-in-out;
+}
+input.search-bar {
+border: none;
+outline: none;
+padding: 1rem 1rem;
+border-radius: 50px;
+width: 15rem;
+height: 2.5rem;
+background-color: rgba(92, 88, 88, 0.644);
+color: white;
+font-family: inherit;
+font-size: 100%;
+}
+.description{
+text-transform: capitalize;
+}
+</style>
+<style>
+/* 메인 */
 .main-box1{
 position: absolute;
 width: 1760px;
@@ -120,9 +168,7 @@ top: 468px;
 font-weight: 700;
 font-size: 18px;
 line-height: 147.6%;
-
 letter-spacing: 0.06em;
-
 color: #000000;
 }
 .brush{
@@ -150,9 +196,17 @@ filter: blur(50px);
 position: absolute;
 width: 911px;
 height: 415px;
-left: 872px;
+left: 800px;
 top: 267px;
 background-image: url("명상사진.jpg");
+}
+
+.main-box1-weather{
+position: absolute;
+width: 369px;
+height: 262px;
+left: 1400px;
+top: 334px;
 }
 
 .main-box2-content1{
@@ -165,16 +219,6 @@ top: 990px;
 background: #D9D9D9;
 }
 
-.vector1{
-
-position: absolute;
-width: 368px;
-height: 17.48px;
-left: 194px;
-top: 432px;
-
-border: 3px solid #3F4042;
-}
 .map-box{
 position: absolute;
 width: 756px;
@@ -183,14 +227,12 @@ left: 970px;
 top: 990px;
 background: #D9D9D9;
 }
-
 </style>
 <section>
 	<div class="main-box1"></div>
 	<div class="main-box1-title">
 		<span>메인타이틀</span>
 	</div>
-	<div class="vector1">~~~~</div>
 	<div class="main-box1-text">
 		<span>
 			메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글메인글
@@ -199,7 +241,24 @@ background: #D9D9D9;
 	<div class="main-box1-image">
 		<img src="https://cdn.pixabay.com/photo/2020/03/29/18/33/girl-4981766_960_720.jpg" width="600">
 	</div>
-	<div class="brush">	</div>
+	<div class="main-box1-weather">
+		<div class="card">
+		<div class="search">
+			<input type="text" class="search-bar" placeholder="Search">
+			<button>
+				<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"></path></svg>
+			</button>
+		</div>
+		<div class="weather loading">
+			<h2 class="city">Weather in Daejeon</h2>
+			<h1 class="temp">13°C</h1>
+			<div class="description">Cloudy</div>
+			<div class="humidity">Humid</div>
+			<div class="wind">Fast</div>
+		</div>
+		</div>
+	</div>
+	<div class="brush"></div>
 </section>
 <section>	
 	<div class="main-box2"></div>
@@ -353,19 +412,15 @@ background: #D9D9D9;
 	function getListItem(index, places) {
 
 	    var el = document.createElement('li'),
-	    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-	                '<div class="info">' +
-	                '   <h5>' + places.place_name + '</h5>';
+	    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' + '<div class="info">' +'<h5>' + places.place_name + '</h5>';
 
 	    if (places.road_address_name) {
-	        itemStr += '    <span>' + places.road_address_name + '</span>' +
-	                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+	        itemStr += '<span>' + places.road_address_name + '</span>' + '<span class="jibun gray">' +  places.address_name  + '</span>';
 	    } else {
-	        itemStr += '    <span>' +  places.address_name  + '</span>'; 
+	        itemStr += '<span>' +  places.address_name  + '</span>'; 
 	    }
 	                 
-	      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-	                '</div>';           
+	      itemStr += '<span class="tel">' + places.phone  + '</span>' + '</div>';           
 
 	    el.innerHTML = itemStr;
 	    el.className = 'item';

@@ -2,65 +2,103 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="REPLY MODIFY" />
 <%@ include file="../common/head.jspf" %>
-	
-	<div class="container mx-auto">
-		<div id="map" style="width:100%;height:350px;"></div>	
+<style>
+.card{
+background: rgba(0, 0, 0, 0.884);
+color: white;
+padding: 1.5rem;
+border-radius: 30px;
+width: 100%;
+max-width: 420px;
+margin: 1rem;
+}
+.search{
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.search button{
+margin: 1rem;
+border-radius: 50%;
+border: none;
+height: 2.5rem;
+width: 2.5rem;
+outline: none;
+background-color: rgba(92, 88, 88, 0.644);
+color: white;
+}
+.search button:hover{
+background-color: rgb(92, 88, 88);
+cursor: pointer;
+transition: 0.2s ease-in-out;
+}
+input.search-bar {
+border: none;
+outline: none;
+padding: 1rem 1rem;
+border-radius: 50px;
+width: 15rem;
+height: 2.5rem;
+background-color: rgba(92, 88, 88, 0.644);
+color: white;
+font-family: inherit;
+font-size: 100%;
+}
+.description{
+text-transform: capitalize;
+}
+</style>
+<div class="container mx-auto">
+	<div class="card">
+		<div class="search">
+			<input type="text" class="search-bar" placeholder="Search">
+			<button>
+				<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"></path></svg>
+			</button>
+		</div>
+		<div class="weather loading">
+			<h2 class="city">Weather in Delhi</h2>
+			<h1 class="temp">13°C</h1>
+			<div class="description">Cloudy</div>
+			<div class="humidity">Humid</div>
+			<div class="wind">Fast</div>
+		</div>
 	</div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services"></script>
-
+</div>	
 <script>
-// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };  
-
-// 지도를 생성합니다    
-var map = new kakao.maps.Map(mapContainer, mapOption); 
-
-// 장소 검색 객체를 생성합니다
-var ps = new kakao.maps.services.Places(); 
-
-// 키워드로 장소를 검색합니다
-ps.keywordSearch('대전 명상', placesSearchCB); 
-
-// 키워드 검색 완료 시 호출되는 콜백함수 입니다
-function placesSearchCB (data, status, pagination) {
-    if (status === kakao.maps.services.Status.OK) {
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        var bounds = new kakao.maps.LatLngBounds();
-
-        for (var i=0; i<data.length; i++) {
-            displayMarker(data[i]);    
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-        }       
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
-    } 
-}
-
-// 지도에 마커를 표시하는 함수입니다
-function displayMarker(place) {
-    
-    // 마커를 생성하고 지도에 표시합니다
-    var marker = new kakao.maps.Marker({
-        map: map,
-        position: new kakao.maps.LatLng(place.y, place.x) 
-    });
-
-    // 마커에 클릭이벤트를 등록합니다
-    kakao.maps.event.addListener(marker, 'click', function() {
-        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-        infowindow.open(map, marker);
-    });
-}
-</script>
+	let weather = {
+	  "apiKey" : "e5a59b3f594231b48a802fb095c74a97",
+	  fetchWeather : function (city) {
+	    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&usits=metric&appid=" + this.apiKey)	    
+	    .then((response) => response.json())
+	    .then((data) => this.displayWeather(data));
+	  }, //api에서 정보를 가져온 후 사용 할 수 있게 data로 넘김
+	  displayWeather : function (data) {
+	    const {name} = data;
+	    const {icon, description} = data.weather[0];
+	    const {temp,humidity} = data.main;
+	    const {speed} = data.wind;
+	    console.log(name,description,icon,temp,humidity,speed);
+	    document.querySelector(".city").innerText = "Weather in " + name;
+	    document.querySelector(".description").innerText = description;
+	    document.querySelector(".temp").innerText = Math.round(temp - 273) + "℃";
+	    document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
+	    document.querySelector(".wind").innerText = "Wind speed: " + speed + "km/h";
+	    document.querySelector(".weather").classList.remove("loading");
+	  }, //데이터를 어떻게 표기할 지
+	  search: function() {
+	    this.fetchWeather(document.querySelector(".search-bar").value);
+	  } // 검색창에 검색한 도시이름이 fetchWeather에 들어갈 수 있도록
+	};
 	
+	document.querySelector(".search button").addEventListener("click", function () {
+		weather.search();
+		});
+		document.querySelector(".search-bar").addEventListener("keyup",function(event) {
+		if (event.key=="Enter") {
+			 weather.search()
+		}
+		});	
+</script>
+
 <%@ include file="../common/foot.jspf" %>

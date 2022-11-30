@@ -84,22 +84,23 @@
 			  replyIds[index] = this.id;
   			  index++;
 			  replyContent += '<div class="divider"></div>';
-			  replyContent += '<div id = "reply'+ replyId +'">'
-			  replyContent += '<div><span>';
+			  replyContent += '<div id = "reply'+ replyId +'">';
+			  replyContent += '<div><span class="font-extrabold">';
 			  replyContent += this.extra__writerName +'</span>';
 			  
 			  //댓글 삭제, 수정버튼
 			  if(loginedMemberId == replyMemberId){
-			  replyContent += '<button class="ml-4" onclick="Reply__ModifyForm('+replyId+','+extra__writerName+','+body+');">수정</button>';			   
+			  replyContent += '<button class="ml-4" onclick="Reply__ModifyForm('+replyId+','+ extra__writerName+','+body+');">수정</button>';			   
 			  replyContent += '<button class="ml-2" onclick="Reply__delete('+this.id+');">삭제</button>';
 			  }
-			  
-			  //답글 쓰기
+
+			  //답글쓰기 버튼 노출
 			  if(${rq.isLogined()}){
-			   replyContent += '<button class="ml-20" onclick="ReOfRe__WriteForm('+replyId+')">답글쓰기</button>';
+			  replyContent += '<button class="ml-20" onclick="ReOfRe__WriteForm('+replyId+')">답글쓰기</button>';
 			  }
 			  replyContent += '</div>';
-			  replyContent += '<div><span class="mx-8">';  
+	   		  replyContent += '</div><span class="font-extrabold">'+this.regDate +'</span></div>';
+			  replyContent += '<div><span class="input input-bordered w-full max-w-xs">';  
 			  replyContent += this.body+'</span></div>';  
 
    			  replyContent += '</div>';
@@ -137,7 +138,7 @@
           	var loginedMemberId = ${rq.loginedMemberId};
    			var replyMemberId= this.memberId;
             rorContent += '<div class="ml-12 mt-2" id = "reply'+ this.id +'">'
-            rorContent += '<div><span>↳&nbsp;&nbsp;'
+            rorContent += '<div><span class="font-extrabold">↳&nbsp;&nbsp;'
             rorContent += this.extra__writerName +'</span>';
            
             if(loginedMemberId == replyMemberId){ 			  

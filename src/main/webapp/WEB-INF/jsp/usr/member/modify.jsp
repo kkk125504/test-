@@ -84,19 +84,19 @@
 					</colgroup>	
 					<tbody>				
 						<tr>
-							<td>가입일</td>
+							<th>가입일</th>
 							<td>${rq.loginedMember.regDate }</td>						
 						</tr>
 						<tr>
-							<td>수정일</td>
+							<th>수정일</th>
 							<td>${rq.loginedMember.updateDate }</td>						
 						</tr>
 						<tr>
-							<td>아이디</td>
-							<td>${rq.loginedMember.id }</td>						
+							<th>아이디</th>
+							<td>${rq.loginedMember.loginId }</td>						
 						</tr>
 						<tr>
-							<td>비밀번호 변경</td>
+							<th>비밀번호 변경</th>
 							<td>
 								<div id="passwordChangeForm">
 									<button type="button" class="btn btn-active btn-ghost" onclick="passwordChangeForm()">변경</button>	
@@ -104,19 +104,19 @@
 							</td>						
 						</tr>
 						<tr>
-							<td>이름</td>
+							<th>이름</th>
 							<td>${rq.loginedMember.name }</td>						
 						</tr>
 						<tr>
-							<td>닉네임</td>
+							<th>닉네임</th>
 							<td><input type="text" name="nickname" placeholder="닉네임을 입력해주세요" class="input input-bordered input-lg" value="${rq.loginedMember.nickname }"/></td>						
 						</tr>
 						<tr>
-							<td>전화번호</td>
+							<th>전화번호</th>
 							<td><input type="text" name="cellphoneNum" placeholder="전화번호를 입력해주세요" class="input input-bordered input-lg" value="${rq.loginedMember.cellphoneNum }"/></td>						
 						</tr>
 						<tr>
-							<td>이메일</td>
+							<th>이메일</th>
 							<td><input type="text" name="email" placeholder="이메일을 입력해주세요" class="input input-bordered input-lg" value="${rq.loginedMember.email }"/></td>						
 						</tr>						
 					</tbody>								
