@@ -77,5 +77,6 @@ public interface ArticleRepository {
 			ORDER BY A.goodReactionPoint DESC
 			LIMIT 0,3
 			""")
-	public List<Article> getForPrintBestArticles(int boardId);	
+	public List<Article> getForPrintBestArticles(int boardId);
+
 }

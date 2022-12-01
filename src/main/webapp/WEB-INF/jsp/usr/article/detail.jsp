@@ -71,7 +71,7 @@
 	          console.log('통신실패!!');
 	        },
 	        success: function(data) {
-			  if(data.data1.length < 1){
+			  if(data.data1 == null){
 			  replyContent += "";
 			  return;
   			  }

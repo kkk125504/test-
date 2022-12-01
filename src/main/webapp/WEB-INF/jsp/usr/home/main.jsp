@@ -250,7 +250,7 @@ background: #D9D9D9;
 			</button>
 		</div>
 		<div class="weather loading">
-			<h2 class="city">Weather in Daejeon</h2>
+			<h2 class="city">Weather in</h2>
 			<h1 class="temp">13°C</h1>
 			<div class="description">Cloudy</div>
 			<div class="humidity">Humid</div>
@@ -288,7 +288,6 @@ background: #D9D9D9;
 	<div class="brush2"></div>
 </section>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2fc9b373fc33a2fd0bd584d5fb81482f&libraries=services,clusterer,drawing"></script>
 <script>
 	// 마커를 담을 배열입니다
@@ -503,5 +502,39 @@ background: #D9D9D9;
 	        el.removeChild (el.lastChild);
 	    }
 	}		
+</script>
+<script>
+		let weather = {
+		  "apiKey" : "e5a59b3f594231b48a802fb095c74a97",
+		  fetchWeather : function (city) {
+		    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&usits=metric&appid=" + this.apiKey)
+		    .then((response) => response.json())
+		    .then((data) => this.displayWeather(data));
+		  }, //api에서 정보를 가져온 후 사용 할 수 있게 data로 넘김
+		  displayWeather : function (data) {
+		    const {name} = data;
+		    const {icon, description} = data.weather[0];
+		    const {temp,humidity} = data.main;
+		    const {speed} = data.wind;
+		    console.log(name,description,icon,temp,humidity,speed);
+		    document.querySelector(".city").innerText = "Weather in " + name;
+		    document.querySelector(".description").innerText = description;
+		    document.querySelector(".temp").innerText = Math.round(temp - 273) + "℃";
+		    document.querySelector(".humidity").innerText = "습기: " + humidity + "%";
+		    document.querySelector(".wind").innerText = "풍속: " + speed + "km/h";
+		    document.querySelector(".weather").classList.remove("loading");
+		  }, //데이터를 어떻게 표기할 지
+		  search: function() {
+		    this.fetchWeather(document.querySelector(".search-bar").value);
+		  } // 검색창에 검색한 도시이름이 fetchWeather에 들어갈 수 있도록
+		};
+		
+		document.querySelector(".search button").addEventListener("click", function () {
+		weather.search();
+		});
+		document.querySelector(".search-bar").addEventListener("keyup",function(event) {
+		if (event.key=="Enter") {
+		weather.search() }
+		});
 </script>
 <%@ include file="../common/foot.jspf" %>
