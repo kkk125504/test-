@@ -109,6 +109,14 @@ public class Rq {
 		req.setAttribute("historyBack", true);
 		return "usr/common/js";
 	}
+	
+
+	public String jsReplaceOnView(String msg) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("historyBack", false);
+		req.setAttribute("replaceUri", "/");
+		return "usr/common/js";
+	}
 
 	public String jsHistoryBack(String msg) {		
 		return Ut.jsHistoryBack(msg);
