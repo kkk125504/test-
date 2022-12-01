@@ -68,13 +68,13 @@ public interface ArticleRepository {
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id 
-			INNER JOIN reply AS RP
+			LEFT JOIN reply AS RP
 			ON A.id = RP.relId
 			AND RP.relTypeCode = 'article'
 			WHERE A.boardId = #{boardId}
 			AND A.goodReactionPoint > 0	
 			GROUP BY A.id		
-			ORDER BY A.goodReactionPoint DESC
+			ORDER BY A.goodReactionPoint, A.regDate  DESC
 			LIMIT 0,3
 			""")
 	public List<Article> getForPrintBestArticles(int boardId);
