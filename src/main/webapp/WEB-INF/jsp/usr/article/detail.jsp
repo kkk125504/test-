@@ -322,7 +322,7 @@
 				
 				<div class= "btns flex justify-end">					
 					<c:if test= "${article.extra__actorCanDelete}" >					
-						<a class ="mx-4 btn-text-link btn btn-active btn-ghost" href="modify?id=${article.id }">수정</a>				
+						<a class ="mx-4 btn-text-link btn btn-active btn-ghost" href="modify?id=${article.id }&replaceUri=${rq.encodedCurrentUri}">수정</a>				
 					</c:if>	
 					
 					<c:if test= "${article.extra__actorCanDelete}" >

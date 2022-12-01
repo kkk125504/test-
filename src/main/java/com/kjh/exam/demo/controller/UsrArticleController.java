@@ -139,7 +139,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body, boolean secret) {
+	public String doModify(int id, String title, String body, boolean secret, String replaceUri) {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
@@ -153,7 +153,7 @@ public class UsrArticleController {
 		}
 
 		articleService.modifyArticle(id, title, body, secret);
-		return rq.jsReplace(Ut.f("%d번 게시물 수정", id), Ut.f("../article/detail?id=%d", id));
+		return rq.jsReplace(Ut.f("%d번 게시물 수정", id), replaceUri);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
