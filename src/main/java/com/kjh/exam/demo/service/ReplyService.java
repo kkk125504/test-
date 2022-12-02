@@ -74,7 +74,7 @@ public class ReplyService {
 
 	public Reply getForPrintReply(Member actor, int id) {
 		Reply reply = replyRepository.getForPrintReply(id);
-
+		
 		updateForPrintData(actor, reply);
 
 		return reply;

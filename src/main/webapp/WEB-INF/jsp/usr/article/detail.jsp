@@ -78,32 +78,30 @@
  			 $(data.data1).each(function(){
 			  var loginedMemberId = ${rq.loginedMemberId};
 			  var replyMemberId= this.memberId;
-			  var replyId = parseInt(JSON.stringify(this.id));
-			  var extra__writerName = JSON.stringify(this.extra__writerName);
-			  var body = JSON.stringify(this.body);
+			  var params__reply = '\''+this.id+'/'+this.regDate+'/'+this.body+'/'+this.extra__writerName+'\'';			
 			  replyIds[index] = this.id;
   			  index++;
 			  replyContent += '<div class="divider"></div>';
-			  replyContent += '<div id = "reply'+ replyId +'">';
+			  replyContent += '<div id = "reply'+ this.id +'">';
 			  replyContent += '<div><span class="font-extrabold">';
 			  replyContent += this.extra__writerName +'</span>';
 			  
 			  //댓글 삭제, 수정버튼
 			  if(loginedMemberId == replyMemberId){
-			  replyContent += '<button class="ml-4" onclick="Reply__ModifyForm('+replyId+','+ extra__writerName+','+body+');">수정</button>';			   
+			  replyContent += '<button class="ml-4" onclick="Reply__ModifyForm('+params__reply+');">수정</button>';			   
 			  replyContent += '<button class="ml-2" onclick="Reply__delete('+this.id+');">삭제</button>';
 			  }
 
 			  //답글쓰기 버튼 노출
 			  if(${rq.isLogined()}){
-			  replyContent += '<button class="ml-20" onclick="ReOfRe__WriteForm('+replyId+')">답글쓰기</button>';
+			  replyContent += '<button class="ml-20" onclick="ReOfRe__WriteForm('+this.id+')">답글쓰기</button>';
 			  }
 			  replyContent += '</div>';
-	   		  replyContent += '</div><span class="font-extrabold">'+this.regDate +'</span></div>';
+	   		  replyContent += '<div><span class="font-extrabold">'+this.regDate +'</span></div>';
 			  replyContent += '<div><span class="input input-bordered w-full max-w-xs">';  
 			  replyContent += this.body+'</span></div>';  
-
    			  replyContent += '</div>';
+   			  
 			  replyContent += '<div id="ReOfRe__writeForm'+this.id+'"></div>';
 			  
 			   // 댓글의 댓글 리스트
@@ -191,16 +189,28 @@
   		$('#ReOfRe__writeForm'+replyId).html(content);
 	}
   
- function Reply__ModifyForm(replyId, replyWriter, body) {  
-	   var replyModifyContent= '<div></div>';
-// 	   replyModifyContent += '<div><span>'; 
-// 	   replyModifyContent += writerName +'</span></div>';
-// 	   replyModifyContent += '<div class="bg-base-300 rounded-box ">';  
-// 	   replyModifyContent += '<input type="text" value="'+body+'"/></div>';  
-// 	   replyModifyContent +='<button class="btn">수정</button>';
-// 	   replyModifyContent +='<button class="btn">취소</button>';
-// 	   replyModifyContent += '</div>';
-	$('#reply'+replyId).html(replyModifyContent);   
+ function Reply__ModifyForm(params__reply) {	 	
+	   var params__replySplit = params__reply.split('/');
+	   var replyId = params__replySplit[0];
+	   var regDate = params__replySplit[1];
+	   var body = params__replySplit[2];
+	   var replyWriter = params__replySplit[3];
+
+	   var replyModifyContent= '';
+	   replyModifyContent += '<form>'
+	   replyModifyContent += '<div>';
+	   replyModifyContent += '<span class="font-extrabold">';
+	   replyModifyContent += replyWriter +'</span>';		  				 		 		 
+	   replyModifyContent += '</div>';
+	   replyModifyContent += '<div><span class="font-extrabold">'+ regDate +'</span></div>';
+	   replyModifyContent += '<div>';
+	   replyModifyContent += '<input type="hidden" name="id" value="'+replyId+'"/>';
+	   replyModifyContent += '<input class="input input-bordered w-full max-w-xs" name="body" value="'+body+'"/>';
+	   replyModifyContent += '<button type="button" onclick="Reply__Modify(form);">수정</button>';
+	   replyModifyContent += '<button type="button" onclick="replyList(); ReOfRe__list();">취소</button>';
+	   replyModifyContent += '</form>';
+	   
+	   $('#reply'+replyId).html(replyModifyContent);   
  	}
 	
 	//댓글 삭제
@@ -208,10 +218,10 @@
 	  $.get('../reply/doDelete', {
 	  id : id,
 	  ajaxMode : 'Y'
-	  }, function(data) {  
+	  }, function(data) {  	  
+	  }, 'json');
 	  replyList();
-	  ReOfRe__list();
-	  }, 'json');  
+      ReOfRe__list();
 	}
 	
 	//댓글 작성
@@ -230,24 +240,20 @@
 		}, 'json');	
 	}	
 	// 댓글 수정 폼
-// 	function Reply__ModifyForm(replyId,writerName,body) {		
-		
-// 		var	replyReplaceContent= "<div>gggggggggggggggg</div>";
-		
-// 		$('.reply'+replyId).replaceWith(replyReplaceContent);
-// 	}
-// 	function Reply__Delete(replyId) {				
-// 		$.get('../reply/doDelete', {
-// 			id : replyId
-// 		}, function(data) {
-// 			if(data.fail){
-// 				alert(data.data.msg);
-// 				return;
-// 			}
-// 			replyList();
-// 		}, 'json');	
-// 	}	
-
+	function Reply__Modify(form) {					
+		$.get('../reply/doModify', {
+			id : form.id.value,
+			body : form.body.value
+		}, function(data) {
+			if(data.fail){
+				alert(data.data.msg);
+				return;
+			}
+			replyList();
+		    ReOfRe__list();
+		}, 'json');	
+	}
+	
 	</script>
 	<section class="mt-8 text-xl">
 		<div class="container mx-auto px-3">
