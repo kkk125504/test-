@@ -73,6 +73,7 @@
 	        success: function(data) {
 			  if(data.data1 == null){
 			  replyContent += "";
+			  $('.replyList').html(replyContent);
 			  return;
   			  }
  			 $(data.data1).each(function(){
@@ -218,10 +219,10 @@
 	  $.get('../reply/doDelete', {
 	  id : id,
 	  ajaxMode : 'Y'
-	  }, function(data) {  	  
+	  }, function(data) { 
+		  replyList();
 	  }, 'json');
-	  replyList();
-      ReOfRe__list();
+	 
 	}
 	
 	//댓글 작성
