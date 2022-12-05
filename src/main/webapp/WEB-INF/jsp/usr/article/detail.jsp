@@ -72,7 +72,6 @@
 	        },
 	        success: function(data) {
 			  if(data.data1 == null){
-			  replyContent += "";
 			  $('.replyList').html(replyContent);
 			  return;
   			  }
